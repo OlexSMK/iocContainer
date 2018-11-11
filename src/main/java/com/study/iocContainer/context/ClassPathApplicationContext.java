@@ -7,13 +7,13 @@ import com.study.iocContainer.service.BeanProcessor;
 import com.study.iocContainer.service.BeanDefinitionReader;
 import com.study.iocContainer.service.xml.XMLBeanDefinitionReader;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ClassPathApplicationContext implements ApplicationContext {
-    Map<String,Bean> beans;
-    Map<String,Bean> systemBeans;
+    private Map<String,Bean> beans;
+    private Map<String,Bean> systemBeansFactory;
+    private Map<String,Bean> systemBeansPostProccesors;
 
 
     public ClassPathApplicationContext(String path){
@@ -21,9 +21,11 @@ public class ClassPathApplicationContext implements ApplicationContext {
         BeanDefinitionReader beanDefinitionReader = new XMLBeanDefinitionReader(path);
         List<BeanDefinition> beanDefinitions= beanDefinitionReader.readBeanDefinition();
         BeanProcessor beanProcessor = new BeanProcessor();
-        beans = beanProcessor.contruct(beanDefinitions);
-
-
+        systemBeansFactory = beanProcessor.getBeanFactoryPostProcessors(beanDefinitions);
+        beanProcessor.runBeanFactoryPostProcessors(beanDefinitions,systemBeansFactory);
+        beans = beanProcessor.construct(beanDefinitions);
+        systemBeansPostProccesors = beanProcessor.getBeanPostProcessors(beans);
+        beanProcessor.runBeanPostProcessors(beans,systemBeansPostProccesors);
     }
 
     @Override

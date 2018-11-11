@@ -1,6 +1,6 @@
 package com.study.iocContainer.service;
 
-import com.study.iocContainer.exception.BeanConstrunctionError;
+import com.study.iocContainer.exception.BeanConstructionError;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,35 +21,35 @@ public class BeanInjector {
             String parameterType = setter.getParameterTypes()[0].getCanonicalName();
             try {
                 if (workWithReferences || parameterType.equals("java.lang.String")) {
-                    setter.invoke(value.getValue());
+                    setter.invoke(target,value.getValue());
                 } else if (parameterType.equals("byte")) {
-                    setter.invoke(Byte.parseByte((String) value.getValue()));
+                    setter.invoke(target,Byte.parseByte((String) value.getValue()));
                 } else if (parameterType.equals("short")) {
-                    setter.invoke(Short.parseShort((String) value.getValue()));
+                    setter.invoke(target,Short.parseShort((String) value.getValue()));
                 } else if (parameterType.equals("int")) {
-                    setter.invoke(Integer.parseInt((String) value.getValue()));
+                    setter.invoke(target,Integer.parseInt((String) value.getValue()));
                 } else if (parameterType.equals("long")) {
-                    setter.invoke(Long.parseLong((String) value.getValue()));
+                    setter.invoke(target,Long.parseLong((String) value.getValue()));
                 } else if (parameterType.equals("float")) {
-                    setter.invoke(Float.parseFloat((String) value.getValue()));
+                    setter.invoke(target,Float.parseFloat((String) value.getValue()));
                 } else if (parameterType.equals("double")) {
-                    setter.invoke(Double.parseDouble((String) value.getValue()));
+                    setter.invoke(target,Double.parseDouble((String) value.getValue()));
                 } else if (parameterType.equals("char")) {
-                    setter.invoke(((String) value.getValue()).toCharArray());
+                    setter.invoke(target,((String) value.getValue()).toCharArray());
                 } else if (parameterType.equals("boolean")) {
-                    setter.invoke(Boolean.parseBoolean((String) value.getValue()));
+                    setter.invoke(target,Boolean.parseBoolean((String) value.getValue()));
                 } else {
-                    throw new BeanConstrunctionError("Unexpected argument type " + parameterType + " for method=" + setter.getName());
+                    throw new BeanConstructionError("Unexpected argument type " + parameterType + " for method=" + setter.getName());
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                throw new BeanConstrunctionError("Illegal access error for method=" + setter.getName());
+                throw new BeanConstructionError("Illegal access error for method=" + setter.getName());
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
-                throw new BeanConstrunctionError("Invocation error for method=" + setter.getName());
+                throw new BeanConstructionError("Invocation error for method=" + setter.getName());
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new BeanConstrunctionError("Error for method=" + setter.getName());
+                throw new BeanConstructionError("Error for method=" + setter.getName());
             }
 
 
@@ -63,7 +63,7 @@ public class BeanInjector {
                 return method;
             }
         }
-        throw new BeanConstrunctionError("Setter not found for property=" + name);
+        throw new BeanConstructionError("Setter not found for property=" + name);
     }
 }
 
