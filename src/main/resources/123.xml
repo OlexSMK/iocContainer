@@ -1,0 +1,10 @@
+<beans>
+    <bean id="first" class="MyClass">
+        <property name="val" value="123"/>
+        <property name="xxx" value="something"/>
+    </bean>
+    <bean id="second" class="MyClass2">
+        <property name="ddd" value="456"/>
+        <property name="xxxx" ref="first"/>
+    </bean>
+</beans>
